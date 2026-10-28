@@ -1,0 +1,13 @@
+cef_product,cef_signature_id,cef_name,unifi_event_class,cim_datamodel
+UniFi Network,200,Threat Detected,ips_threat,Intrusion_Detection
+UniFi Network,203,Blocked by Firewall,firewall_block,Network_Traffic
+UniFi Network,400,WiFi Client Connected,client_connect,Network_Sessions
+UniFi Network,401,WiFi Client Disconnected,client_disconnect,Network_Sessions
+UniFi Network,402,WiFi Client Roamed,client_roam,
+UniFi Network,403,Wired Client Connected,client_connect,Network_Sessions
+UniFi Network,404,Wired Client Disconnected,client_disconnect,Network_Sessions
+UniFi Network,529,WiFi Impersonation Detected,rogue_ap,Intrusion_Detection
+UniFi Network,544,Network Accessed,admin_access,Authentication
+UniFi OS,1000,Admin Accessed UniFi OS,admin_access,Authentication
+UniFi Protect,2159,motion,protect_detection,
+UniFi Protect,2161,smartDetectZone,protect_detection,

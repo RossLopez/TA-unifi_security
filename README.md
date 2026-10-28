@@ -1,0 +1,28 @@
+# UniFi Security Add-on for Splunk (TA-unifi_security)
+
+Splunk add-on for Ubiquiti UniFi security data: sourcetype routing, host correction, field extraction and CIM mapping for UniFi OS / gateway syslog, UniFi AP and switch syslog, and the UniFi SIEM integration (CEF) for UniFi Network, UniFi OS and UniFi Protect.
+
+Install on indexers / heavy forwarders **and** search heads. Dashboards and detections live in the companion app, **UniFi Security** ([`unifi_security`](https://github.com/RossLopez/unifi_security)).
+
+## Repository layout
+
+| Path | Purpose |
+|---|---|
+| `TA-unifi_security/` | The add-on itself (packaged as-is). See its [README](TA-unifi_security/README.md) for sourcetypes, fields and CIM mappings. |
+| `samples/` | Sanitized sample events used for offline regex checks |
+| `scripts/check_regex.py` | Offline check: applies the add-on's routing and EXTRACT/REPORT regexes to `samples/` |
+| `scripts/package.sh` | Builds `dist/TA-unifi_security-<version>.spl` |
+| `docs/ROADMAP.md` | Backlog, Splunkbase checklist and release history |
+
+## Build
+
+```bash
+python3 scripts/check_regex.py
+scripts/package.sh
+```
+
+## License
+
+Apache License 2.0 — see [LICENSE](LICENSE).
+
+*Not affiliated with or endorsed by Ubiquiti Inc. UniFi is a trademark of Ubiquiti Inc.*
