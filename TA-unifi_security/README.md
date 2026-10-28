@@ -1,4 +1,4 @@
-# UniFi Security Add-on (TA-unifi_security) v0.1.3
+# UniFi Security Add-on (TA-unifi_security) v0.1.4
 
 Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and CIM mapping for UDM Pro / UniFi OS syslog, UniFi APs and switches, and the UniFi SIEM integration (CEF).
 
@@ -62,6 +62,7 @@ Index-time transforms set `host` to the originating device (gateway hostname, AP
 
 ## Release notes
 
+- **0.1.4** — Added app icons and logos (`static/`).
 - **0.1.3** — **Breaking:** the add-on no longer ships a `[udp://5555]` input (not allowed in Splunk Cloud); create your own input with sourcetype `unifi:syslog` (see Install). Added `[id]` stanza and `app.manifest`; update checks enabled; example IPs removed from config comments.
 - **0.1.2** — Apache 2.0 LICENSE included in the package; sanitized example values in config comments.
 - **0.1.1** — Fixed CEF extension, stahtd and iptables field extraction (dynamic-key `FORMAT` does not support a literal prefix, which produced a single `unifi_$1` field). CEF extension fields now use native key names (`UNIFI*`).

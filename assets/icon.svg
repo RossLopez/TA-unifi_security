@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>
+<linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#1D2C47"/><stop offset="1" stop-color="#0A111F"/>
+</linearGradient>
+<linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#4AA3FF"/><stop offset="1" stop-color="#0B5BD9"/>
+</linearGradient>
+<linearGradient id="glyph" gradientUnits="userSpaceOnUse" x1="222" y1="206" x2="391.2" y2="309.4">
+  <stop offset="0" stop-color="#FFFFFF"/><stop offset="0.45" stop-color="#DCE8F7"/><stop offset="0.85" stop-color="#2F8BFF"/>
+</linearGradient>
+<linearGradient id="trace" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="170" y2="0">
+  <stop offset="0" stop-color="#2F8BFF" stop-opacity="0"/><stop offset="0.6" stop-color="#2F8BFF"/><stop offset="1" stop-color="#4AA3FF"/>
+</linearGradient>
+<filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+  <feGaussianBlur stdDeviation="10" result="b"/>
+  <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+</defs><rect width="512" height="512" rx="96" fill="url(#tile)"/><path d="M-10 176 H116" stroke="url(#trace)" stroke-width="13" stroke-linecap="round"/><circle cx="132" cy="176" r="15" fill="none" stroke="#4AA3FF" stroke-width="10"/><path d="M-10 216 H94" stroke="url(#trace)" stroke-width="13" stroke-linecap="round"/><circle cx="110" cy="216" r="15" fill="none" stroke="#4AA3FF" stroke-width="10"/><path d="M-10 296 H94" stroke="url(#trace)" stroke-width="13" stroke-linecap="round"/><circle cx="110" cy="296" r="15" fill="none" stroke="#4AA3FF" stroke-width="10"/><path d="M-10 336 H116" stroke="url(#trace)" stroke-width="13" stroke-linecap="round"/><circle cx="132" cy="336" r="15" fill="none" stroke="#4AA3FF" stroke-width="10"/><path d="M-10 256 H184" stroke="url(#trace)" stroke-width="13"/><g fill="none" stroke-width="22" stroke-linecap="butt" filter="url(#glow)"><path d="M188.5 221.8 A132 132 0 0 1 297.6 125.3" stroke="#DCE8F7"/><path d="M320.6 124.1 A132 132 0 0 1 382.0 141.7" stroke="url(#blue)"/><path d="M417.1 171.2 A132 132 0 0 1 441.5 296.8" stroke="url(#blue)"/><path d="M432.5 318.0 A132 132 0 0 1 417.1 340.8" stroke="#DCE8F7"/><path d="M373.9 374.6 A132 132 0 0 1 266.6 378.4" stroke="#DCE8F7"/><path d="M250.0 370.3 A132 132 0 0 1 186.9 283.4" stroke="url(#blue)"/></g><circle cx="400.8" cy="154.9" r="34" fill="#0A111F"/><circle cx="400.8" cy="154.9" r="27" fill="none" stroke="#DCE8F7" stroke-width="12"/><circle cx="400.8" cy="154.9" r="14" fill="#2F8BFF"/><circle cx="397.3" cy="360.0" r="34" fill="#0A111F"/><circle cx="397.3" cy="360.0" r="27" fill="none" stroke="#DCE8F7" stroke-width="12"/><circle cx="397.3" cy="360.0" r="14" fill="#2F8BFF"/><g fill="none" stroke="url(#glyph)" stroke-width="25" stroke-linecap="round"><path d="M292.0 276.0 A34 34 0 0 1 340.0 276.0"/><path d="M270.7 254.7 A64 64 0 0 1 361.3 254.7"/><path d="M249.5 233.5 A94 94 0 0 1 382.5 233.5"/></g><circle cx="316" cy="300" r="17" fill="url(#glyph)"/></svg>

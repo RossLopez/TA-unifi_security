@@ -11,6 +11,7 @@ Install on indexers / heavy forwarders **and** search heads. Dashboards and dete
 | `TA-unifi_security/` | The add-on itself (packaged as-is). See its [README](TA-unifi_security/README.md) for sourcetypes, fields and CIM mappings. |
 | `samples/` | Sanitized sample events used for offline regex checks |
 | `scripts/check_regex.py` | Offline check: applies the add-on's routing and EXTRACT/REPORT regexes to `samples/` |
+| `scripts/build_icons.py` | Renders `assets/` (SVG sources, 512px Splunkbase listing icon) and the app's `static/` icons and logos (`pip install resvg-py`) |
 | `scripts/package.sh` | Builds `dist/TA-unifi_security-<version>.spl` |
 | `docs/ROADMAP.md` | Backlog, Splunkbase checklist and release history |
 
