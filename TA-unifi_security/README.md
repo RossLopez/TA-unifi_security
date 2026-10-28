@@ -1,14 +1,24 @@
-# UniFi Security Add-on (TA-unifi_security) v0.1.2
+# UniFi Security Add-on (TA-unifi_security) v0.1.3
 
 Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and CIM mapping for UDM Pro / UniFi OS syslog, UniFi APs and switches, and the UniFi SIEM integration (CEF).
 
 ## Install (single instance)
 
-1. If another app already defines `[udp://5555]`, remove it there (Splunk merges same-named input stanzas across apps, and the app that sorts first in ASCII order wins conflicting settings).
-2. Install `TA-unifi_security` (Apps > Manage Apps > Install app from file) and restart Splunk.
-3. Verify: `index=unifi earliest=-15m | stats count by sourcetype host`
+1. Install `TA-unifi_security` (Apps > Manage Apps > Install app from file) and restart Splunk.
+2. Create an index for UniFi data (the companion app's `unifi_index` macro defaults to `index=unifi`).
+3. Create a syslog input with sourcetype `unifi:syslog` (the add-on does not ship one). For example, in `$SPLUNK_HOME/etc/apps/TA-unifi_security/local/inputs.conf`:
 
-On a distributed deployment, install the TA on the receiving HF/indexers *and* the search heads.
+   ```ini
+   [udp://5555]
+   index = unifi
+   sourcetype = unifi:syslog
+   connection_host = ip
+   ```
+
+   Point the UniFi syslog / SIEM integration at that port. If another app already defines the same stanza (e.g. `[udp://5555]`), remove it there: Splunk merges same-named input stanzas across apps, and the app that sorts first in ASCII order wins conflicting settings.
+4. Verify: `index=unifi earliest=-15m | stats count by sourcetype host`
+
+On a distributed deployment, install the TA on the receiving HF/indexers *and* the search heads, and create the input on the instance that receives syslog. Splunk Cloud does not allow network inputs in apps; receive UniFi syslog on a heavy forwarder with sourcetype `unifi:syslog` (SC4S support is on the roadmap).
 
 ## Sourcetypes
 
@@ -52,6 +62,7 @@ Index-time transforms set `host` to the originating device (gateway hostname, AP
 
 ## Release notes
 
+- **0.1.3** — **Breaking:** the add-on no longer ships a `[udp://5555]` input (not allowed in Splunk Cloud); create your own input with sourcetype `unifi:syslog` (see Install). Added `[id]` stanza and `app.manifest`; update checks enabled; example IPs removed from config comments.
 - **0.1.2** — Apache 2.0 LICENSE included in the package; sanitized example values in config comments.
 - **0.1.1** — Fixed CEF extension, stahtd and iptables field extraction (dynamic-key `FORMAT` does not support a literal prefix, which produced a single `unifi_$1` field). CEF extension fields now use native key names (`UNIFI*`).
 - **0.1.0** — Initial build.

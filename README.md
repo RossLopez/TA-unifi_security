@@ -21,6 +21,13 @@ python3 scripts/check_regex.py
 scripts/package.sh
 ```
 
+AppInspect (needs Python 3.9–3.12 and `brew install libmagic`):
+
+```bash
+python3.12 -m venv .venv && .venv/bin/pip install splunk-appinspect
+.venv/bin/splunk-appinspect inspect dist/TA-unifi_security-<version>.spl --mode precert --included-tags cloud
+```
+
 ## License
 
 Apache License 2.0 — see [LICENSE](LICENSE).
