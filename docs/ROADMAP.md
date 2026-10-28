@@ -8,10 +8,10 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 - [x] `inputs.conf`: no input shipped; README documents an example `[udp://5555]` stanza for `local/` (Cloud disallows network inputs in apps).
 - [ ] Decide sourcetype naming (`unifi:*` vs vendor-prefixed `ubiquiti:unifi:*`); check for collisions with other UniFi add-ons and SC4S.
 - [x] `app.conf`: `[id]` stanza, `check_for_updates = true`, `is_configured` removed. `[triggers]` not needed (only Splunk-native conf files).
-- [ ] Publisher / author name for the listing (`author = Ross` today).
+- [x] Author: Ross Lopez (`app.conf`, `app.manifest`).
 - [x] `app.manifest` (`slim generate-manifest`) with target workloads: search heads + indexers.
 - [x] Icons and logos in `static/` (`appIcon` 36/72, `appIconAlt` 36/72, `appLogo` 160x40/320x80); built by `scripts/build_icons.py`, 512px listing icon in `assets/`.
-- [ ] Support contact.
+- [x] Support contact: GitHub Issues (README Support section, issue template). Repos must be public before the listing goes live.
 - [x] LICENSE (Apache 2.0) and release notes.
 - [x] Clean packaging (no `local/`, `local.meta`, hidden files; 644/755 perms; top dir == app id).
 - [x] `splunk-appinspect inspect --mode precert --included-tags cloud` clean (AppInspect 4.3.1, 0.1.3). Re-run before every release.
@@ -43,6 +43,7 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 - [ ] Screenshots; trademark disclaimer; no Ubiquiti logos.
 
 ## Release history
+- 0.1.5 — Author set to Ross Lopez; added support details and a GitHub bug report template.
 - 0.1.4 — Added app icons and logos (`static/`) and `scripts/build_icons.py`.
 - 0.1.3 — AppInspect fixes: removed the shipped UDP input (breaking: create your own input), added `[id]` and `app.manifest`, removed `is_configured`, enabled update checks, removed example IPs from comments.
 - 0.1.2 — Moved to its own repository; Apache 2.0 LICENSE included in the package; sanitized example values in config comments and samples.

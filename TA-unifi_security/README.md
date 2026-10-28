@@ -1,4 +1,4 @@
-# UniFi Security Add-on (TA-unifi_security) v0.1.4
+# UniFi Security Add-on (TA-unifi_security) v0.1.5
 
 Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and CIM mapping for UDM Pro / UniFi OS syslog, UniFi APs and switches, and the UniFi SIEM integration (CEF).
 
@@ -60,8 +60,15 @@ Index-time transforms set `host` to the originating device (gateway hostname, AP
 - Timestamps are taken from the syslog header (local time, no zone). Set `TZ` in `[unifi:syslog]` if the Splunk server's OS zone differs from the devices'.
 - UniFi IPS `action=allowed` means detect-only (IDS mode) or an alert-only signature: the traffic was not dropped.
 
+## Support
+
+Developer supported, best effort. Report parsing problems and request device or event coverage at https://github.com/RossLopez/TA-unifi_security/issues. Replace real IP addresses, MAC addresses, hostnames, usernames and SSIDs in any log samples you post.
+
+Not supported by Splunk or Ubiquiti.
+
 ## Release notes
 
+- **0.1.5** — Author set to Ross Lopez; added support details.
 - **0.1.4** — Added app icons and logos (`static/`).
 - **0.1.3** — **Breaking:** the add-on no longer ships a `[udp://5555]` input (not allowed in Splunk Cloud); create your own input with sourcetype `unifi:syslog` (see Install). Added `[id]` stanza and `app.manifest`; update checks enabled; example IPs removed from config comments.
 - **0.1.2** — Apache 2.0 LICENSE included in the package; sanitized example values in config comments.
