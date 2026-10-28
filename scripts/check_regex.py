@@ -24,8 +24,8 @@ def py(rx):  # PCRE named groups -> Python
 props, transforms = load("props.conf"), load("transforms.conf")
 
 def route(raw):
-    host, st = None, "unifi:syslog"
-    for name in [n.strip() for n in props["unifi:syslog"]["TRANSFORMS-unifi_routing"].split(",")]:
+    host, st = None, "ubiquiti:unifi"
+    for name in [n.strip() for n in props["ubiquiti:unifi"]["TRANSFORMS-unifi_routing"].split(",")]:
         t = transforms[name]
         m = py(t["REGEX"]).search(raw)
         if not m:

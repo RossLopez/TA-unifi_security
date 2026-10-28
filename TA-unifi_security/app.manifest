@@ -5,7 +5,7 @@
     "id": {
       "group": null,
       "name": "TA-unifi_security",
-      "version": "0.1.5"
+      "version": "0.2.0"
     },
     "author": [
       {
@@ -15,7 +15,7 @@
       }
     ],
     "releaseDate": null,
-    "description": "Add-on for the UniFi Security app. Parsing for Ubiquiti UniFi (UDM Pro, UniFi APs/switches, UniFi Protect). Splits syslog into unifi:cef / unifi:syslog / unifi:ap / unifi:switch, corrects host, and maps CEF SIEM-integration events to CIM.",
+    "description": "Add-on for the UniFi Security app. Parsing for Ubiquiti UniFi (UDM Pro, UniFi APs/switches, UniFi Protect). Splits syslog into ubiquiti:unifi:cef / ubiquiti:unifi / ubiquiti:unifi:ap / ubiquiti:unifi:switch, corrects host, and maps CEF SIEM-integration events to CIM.",
     "classification": {
       "intendedAudience": "Security",
       "categories": [

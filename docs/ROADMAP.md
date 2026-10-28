@@ -6,7 +6,7 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 
 ### Must-fix (AppInspect / Splunk Cloud)
 - [x] `inputs.conf`: no input shipped; README documents an example `[udp://5555]` stanza for `local/` (Cloud disallows network inputs in apps).
-- [ ] Decide sourcetype naming (`unifi:*` vs vendor-prefixed `ubiquiti:unifi:*`); check for collisions with other UniFi add-ons and SC4S.
+- [x] Sourcetype naming: `ubiquiti:unifi`, `ubiquiti:unifi:cef`, `ubiquiti:unifi:ap`, `ubiquiti:unifi:switch` (Splunk vendor:product:technology convention). Avoids SC4S's `ubnt*` names, which the UniFi App for Splunk also uses.
 - [x] `app.conf`: `[id]` stanza, `check_for_updates = true`, `is_configured` removed. `[triggers]` not needed (only Splunk-native conf files).
 - [x] Author: Ross Lopez (`app.conf`, `app.manifest`).
 - [x] `app.manifest` (`slim generate-manifest`) with target workloads: search heads + indexers.
@@ -33,7 +33,7 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 - [ ] WiFi auth: `user` = client MAC is a stretch — document or move to custom eventtype.
 - [ ] sudo as Authentication/privileged is debatable (Change / Endpoint?).
 - [ ] `bytes` from iptables `LEN` is packet length, not session bytes.
-- [ ] Scope `EVAL-dest = host` (applies to every `unifi:syslog` event).
+- [ ] Scope `EVAL-dest = host` (applies to every `ubiquiti:unifi` event).
 - [ ] Generic field names (`process`, `message`, `command`, `reason`) — prefix or confirm CIM-correct.
 - [ ] `process` not extracted for iptables rule-log events (header regex expects `proc[pid]:`).
 
@@ -43,6 +43,7 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 - [ ] Screenshots; trademark disclaimer; no Ubiquiti logos.
 
 ## Release history
+- 0.2.0 — Breaking: sourcetypes renamed `unifi:*` → `ubiquiti:unifi*`; README documents `rename` stanzas for data indexed by 0.1.x.
 - 0.1.5 — Author set to Ross Lopez; added support details and a GitHub bug report template.
 - 0.1.4 — Added app icons and logos (`static/`) and `scripts/build_icons.py`.
 - 0.1.3 — AppInspect fixes: removed the shipped UDP input (breaking: create your own input), added `[id]` and `app.manifest`, removed `is_configured`, enabled update checks, removed example IPs from comments.

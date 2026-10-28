@@ -1,4 +1,4 @@
-# UniFi Security Add-on (TA-unifi_security) v0.1.5
+# UniFi Security Add-on (TA-unifi_security) v0.2.0
 
 Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and CIM mapping for UDM Pro / UniFi OS syslog, UniFi APs and switches, and the UniFi SIEM integration (CEF).
 
@@ -6,30 +6,48 @@ Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and 
 
 1. Install `TA-unifi_security` (Apps > Manage Apps > Install app from file) and restart Splunk.
 2. Create an index for UniFi data (the companion app's `unifi_index` macro defaults to `index=unifi`).
-3. Create a syslog input with sourcetype `unifi:syslog` (the add-on does not ship one). For example, in `$SPLUNK_HOME/etc/apps/TA-unifi_security/local/inputs.conf`:
+3. Create a syslog input with sourcetype `ubiquiti:unifi` (the add-on does not ship one). For example, in `$SPLUNK_HOME/etc/apps/TA-unifi_security/local/inputs.conf`:
 
    ```ini
    [udp://5555]
    index = unifi
-   sourcetype = unifi:syslog
+   sourcetype = ubiquiti:unifi
    connection_host = ip
    ```
 
    Point the UniFi syslog / SIEM integration at that port. If another app already defines the same stanza (e.g. `[udp://5555]`), remove it there: Splunk merges same-named input stanzas across apps, and the app that sorts first in ASCII order wins conflicting settings.
 4. Verify: `index=unifi earliest=-15m | stats count by sourcetype host`
 
-On a distributed deployment, install the TA on the receiving HF/indexers *and* the search heads, and create the input on the instance that receives syslog. Splunk Cloud does not allow network inputs in apps; receive UniFi syslog on a heavy forwarder with sourcetype `unifi:syslog` (SC4S support is on the roadmap).
+On a distributed deployment, install the TA on the receiving HF/indexers *and* the search heads, and create the input on the instance that receives syslog. Splunk Cloud does not allow network inputs in apps; receive UniFi syslog on a heavy forwarder with sourcetype `ubiquiti:unifi` (SC4S support is on the roadmap).
 
 ## Sourcetypes
 
 | Sourcetype | Source | Examples |
 |---|---|---|
-| `unifi:syslog` | UDM Pro / UniFi OS (entry sourcetype) | dnsmasq-dhcp, sudo, sshd, inadyn, iptables rule logs (`[PREROUTING-DNAT-3] … SRC= DST=`) |
-| `unifi:cef` | UniFi SIEM integration (CEF) | Network 200/203/400-404/529/544, UniFi OS 1000, Protect 2159/2161 |
-| `unifi:ap` | UniFi APs (U6 Pro, U6 Extender, AC Pro Gen2 tested) | hostapd, stahtd (JSON), kernel/wlan |
-| `unifi:switch` | UniFi switches (US-8-60W, USW-Flex-2.5G tested) | switch LLDP / DHCP snooping / link |
+| `ubiquiti:unifi` | UDM Pro / UniFi OS (entry sourcetype) | dnsmasq-dhcp, sudo, sshd, inadyn, iptables rule logs (`[PREROUTING-DNAT-3] … SRC= DST=`) |
+| `ubiquiti:unifi:cef` | UniFi SIEM integration (CEF) | Network 200/203/400-404/529/544, UniFi OS 1000, Protect 2159/2161 |
+| `ubiquiti:unifi:ap` | UniFi APs (U6 Pro, U6 Extender, AC Pro Gen2 tested) | hostapd, stahtd (JSON), kernel/wlan |
+| `ubiquiti:unifi:switch` | UniFi switches (US-8-60W, USW-Flex-2.5G tested) | switch LLDP / DHCP snooping / link |
 
 Index-time transforms set `host` to the originating device (gateway hostname, AP/switch IP or name) instead of the relay. Data indexed before install keeps its original sourcetype and host.
+
+## Upgrading from 0.1.x
+
+0.2.0 renames the sourcetypes (`unifi:syslog` → `ubiquiti:unifi`, `unifi:cef` → `ubiquiti:unifi:cef`, `unifi:ap` → `ubiquiti:unifi:ap`, `unifi:switch` → `ubiquiti:unifi:switch`).
+
+1. Change your input's `sourcetype` to `ubiquiti:unifi`.
+2. Optional: to keep fields and eventtypes on data indexed before the upgrade, map the old names at search time in `local/props.conf`:
+
+   ```ini
+   [unifi:syslog]
+   rename = ubiquiti:unifi
+   [unifi:cef]
+   rename = ubiquiti:unifi:cef
+   [unifi:ap]
+   rename = ubiquiti:unifi:ap
+   [unifi:switch]
+   rename = ubiquiti:unifi:switch
+   ```
 
 ## Field conventions
 
@@ -57,7 +75,7 @@ Index-time transforms set `host` to the originating device (gateway hostname, AP
 
 ## Notes
 
-- Timestamps are taken from the syslog header (local time, no zone). Set `TZ` in `[unifi:syslog]` if the Splunk server's OS zone differs from the devices'.
+- Timestamps are taken from the syslog header (local time, no zone). Set `TZ` in `[ubiquiti:unifi]` if the Splunk server's OS zone differs from the devices'.
 - UniFi IPS `action=allowed` means detect-only (IDS mode) or an alert-only signature: the traffic was not dropped.
 
 ## Support
@@ -68,6 +86,7 @@ Not supported by Splunk or Ubiquiti.
 
 ## Release notes
 
+- **0.2.0** — **Breaking:** sourcetypes renamed to Splunk's vendor:product convention: `ubiquiti:unifi` (entry and UniFi OS / gateway), `ubiquiti:unifi:cef`, `ubiquiti:unifi:ap`, `ubiquiti:unifi:switch`. See Upgrading from 0.1.x.
 - **0.1.5** — Author set to Ross Lopez; added support details.
 - **0.1.4** — Added app icons and logos (`static/`).
 - **0.1.3** — **Breaking:** the add-on no longer ships a `[udp://5555]` input (not allowed in Splunk Cloud); create your own input with sourcetype `unifi:syslog` (see Install). Added `[id]` stanza and `app.manifest`; update checks enabled; example IPs removed from config comments.
