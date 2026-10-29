@@ -41,11 +41,12 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 - [ ] `process` not extracted for iptables rule-log events (header regex expects `proc[pid]:`).
 
 ### Listing / docs
-- [ ] README: supported devices/firmware, enabling UniFi SIEM integration, install-location table, sourcetype + CIM tables, troubleshooting (input stanza merge precedence).
+- [x] README: supported devices/firmware, enabling UniFi SIEM integration, install-location table, sourcetype + CIM tables, troubleshooting (input stanza merge precedence).
 - [ ] Sanitized samples + eventgen + pytest-splunk-addon configs.
 - [x] Screenshots (`assets/screenshots/`, taken on `unifi_security/scripts/demo_data.py` data); trademark disclaimer; no Ubiquiti logos.
 
 ## Release history
+- 0.2.3 — README: supported devices, where to install, sending logs from UniFi (SIEM, firewall traffic, device syslog) and troubleshooting.
 - 0.2.2 — Documented supported Splunk versions: Enterprise 9.4–10.6, tested on each in Docker.
 - 0.2.1 — Splunk Web icons and logos fill the whole square; Splunk 10 showed its blue icon background through the transparent rounded corners.
 - 0.2.0 — Breaking: sourcetypes renamed `unifi:*` → `ubiquiti:unifi*`; README documents `rename` stanzas for data indexed by 0.1.x.

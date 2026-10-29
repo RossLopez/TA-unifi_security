@@ -1,4 +1,4 @@
-# UniFi Security Add-on (TA-unifi_security) v0.2.2
+# UniFi Security Add-on (TA-unifi_security) v0.2.3
 
 Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and CIM mapping for UDM Pro / UniFi OS syslog, UniFi APs and switches, and the UniFi SIEM integration (CEF).
 
@@ -6,6 +6,31 @@ Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and 
 
 - Splunk Enterprise 9.4, 10.0, 10.2, 10.4 and 10.6 (tested on 9.4.16, 10.0.11, 10.2.8, 10.4.2 and 10.6.1).
 - Splunk Cloud Platform: passes AppInspect's Splunk Cloud checks; not yet tested on a Cloud stack.
+
+## Supported devices
+
+Tested with:
+
+| Device | Role | Firmware / software | Sourcetypes |
+|---|---|---|---|
+| UDM Pro | Gateway and UniFi OS console | UniFi OS 5.1, UniFi Network 10.6, UniFi Protect 7.3 | `ubiquiti:unifi`, `ubiquiti:unifi:cef` |
+| U6 Pro, U6 Extender, UAP-AC-Pro-Gen2 | Access points | 6.8.2 | `ubiquiti:unifi:ap` |
+| US-8-60W | Switch | 7.5.15 | `ubiquiti:unifi:switch` |
+| USW-Flex-2.5G-5 | Switch | 2.1.8 | `ubiquiti:unifi:switch` |
+
+Other UniFi consoles (UDM-SE, UDR, UCG, UXG, Cloud Key) send the same SIEM (CEF) events, so the CEF-based fields, eventtypes and dashboards should work, but their syslog has not been tested. If events from your devices are not parsed, open an issue with a few sanitized samples (see Support).
+
+## Where to install
+
+| Splunk instance | Install the add-on? | Why |
+|---|---|---|
+| Search heads (incl. search head clusters) | Yes | Search-time field extractions, eventtypes, tags and CIM mapping |
+| Heavy forwarder that receives UniFi syslog | Yes | Index-time `host` and sourcetype routing runs on the first full Splunk instance that parses the data |
+| Indexers | Yes | Index-time routing when syslog is received directly on an indexer (no heavy forwarder in front) |
+| Universal forwarders | No | Universal forwarders don't parse; just set `sourcetype = ubiquiti:unifi` on the input |
+| Splunk Cloud Platform | Yes, on the Cloud stack | Plus the heavy forwarder that receives syslog (Cloud does not accept network inputs in apps) |
+
+On a single instance, install it once. The add-on has no setup page and no Python, so nothing else needs configuring.
 
 ## Install (single instance)
 
@@ -20,10 +45,21 @@ Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and 
    connection_host = ip
    ```
 
-   Point the UniFi syslog / SIEM integration at that port. If another app already defines the same stanza (e.g. `[udp://5555]`), remove it there: Splunk merges same-named input stanzas across apps, and the app that sorts first in ASCII order wins conflicting settings.
-4. Verify: `index=unifi earliest=-15m | stats count by sourcetype host`
+   Use a port above 1024 (Splunk normally runs as a non-root user and cannot bind 514). If another app already defines the same stanza (e.g. `[udp://5555]`), remove it there: Splunk merges same-named input stanzas across apps, and the app that sorts first in ASCII order wins conflicting settings.
+4. Point UniFi at that port (next section).
+5. Verify: `index=unifi earliest=-15m | stats count by sourcetype host`
 
-On a distributed deployment, install the TA on the receiving HF/indexers *and* the search heads, and create the input on the instance that receives syslog. Splunk Cloud does not allow network inputs in apps; receive UniFi syslog on a heavy forwarder with sourcetype `ubiquiti:unifi` (SC4S support is on the roadmap).
+Splunk Cloud Platform: receive UniFi syslog on a heavy forwarder with the input above and the add-on installed (SC4S support is on the roadmap).
+
+## Send logs from UniFi
+
+Menu names below are from UniFi Network 10.x on UniFi OS 5.x and move between releases.
+
+1. **SIEM events (CEF):** in UniFi Network, open **Settings > Control Plane > Integrations**. Next to **Activity Logging (Syslog)** choose **SIEM Server**, enter the Splunk (or heavy forwarder) IP and the input port, select the event categories you want (at least security detections, admin activity, client and device events) and apply. This produces `ubiquiti:unifi:cef` events: IPS/IDS threats, firewall blocks, WiFi impersonation (rogue AP), client connect/disconnect, admin access, and UniFi OS and UniFi Protect events from the same console. The SIEM option needs UniFi Network 8.5 or later.
+2. **Firewall traffic:** open **Settings > CyberSecure > Traffic Logging** and send **Activity Logging (Syslog)** to the same server and port. To log a specific policy, turn on **Syslog Logging** for it under **Settings > Policy Engine**. These arrive as iptables rule logs (`[PREROUTING-DNAT-3] … SRC= DST=`) in `ubiquiti:unifi`.
+3. **Gateway, AP and switch syslog** (DHCP, sudo, SSH, hostapd, `stahtd` WiFi auth results, switch link events): with remote logging on, UniFi Network configures adopted devices to send their own syslog directly to the same server. If AP or switch events don't appear, look for a debug or device-log option in the same Activity Logging panel (the name varies by version).
+
+Everything can share one input: the add-on routes events to the right sourcetype by content.
 
 ## Sourcetypes
 
@@ -83,6 +119,18 @@ Index-time transforms set `host` to the originating device (gateway hostname, AP
 - Timestamps are taken from the syslog header (local time, no zone). Set `TZ` in `[ubiquiti:unifi]` if the Splunk server's OS zone differs from the devices'.
 - UniFi IPS `action=allowed` means detect-only (IDS mode) or an alert-only signature: the traffic was not dropped.
 
+## Troubleshooting
+
+| Symptom | Check |
+|---|---|
+| No events at all | The input's port and protocol match UniFi's setting; nothing blocks the port on the Splunk host (`sudo lsof -iUDP:5555`); the input is enabled and Splunk was restarted after creating it. |
+| Everything is `ubiquiti:unifi`, nothing in `:cef`, `:ap` or `:switch`, and `host` is the console or relay | Index-time routing did not run: install the add-on on the heavy forwarder or indexer that receives the syslog (not only the search head), make sure the input's `sourcetype` is exactly `ubiquiti:unifi`, and restart. Routing applies to new data only. |
+| Events arrive but fields, eventtypes and tags are missing | Install the add-on on the search heads as well. |
+| Input settings (index, sourcetype) ignored | Another app defines the same input stanza and wins the merge; remove the duplicate. `$SPLUNK_HOME/bin/splunk btool inputs list udp://5555 --debug` shows which file each setting comes from. |
+| Timestamps hours off | UniFi devices log local time without a zone. Set `TZ` in `local/props.conf` under `[ubiquiti:unifi]`, or per device with `[host::<device>]` (some switches, e.g. USW-Flex, log in UTC). |
+| No `ubiquiti:unifi:cef` events | SIEM Server is not selected under Control Plane > Integrations, or no event categories are selected. |
+| Old searches broke after upgrading from 0.1.x | Sourcetypes were renamed in 0.2.0; see Upgrading from 0.1.x. |
+
 ## Support
 
 Developer supported, best effort. Report parsing problems and request device or event coverage at https://github.com/RossLopez/TA-unifi_security/issues. Replace real IP addresses, MAC addresses, hostnames, usernames and SSIDs in any log samples you post.
@@ -91,6 +139,7 @@ Not supported by Splunk or Ubiquiti.
 
 ## Release notes
 
+- **0.2.3** — README: supported devices, where to install, sending logs from UniFi (SIEM, firewall traffic, device syslog) and troubleshooting.
 - **0.2.2** — Documented supported Splunk versions: Enterprise 9.4–10.6, tested on each in Docker.
 - **0.2.1** — Splunk Web icons and logos fill the whole square; Splunk 10 showed its blue icon background through the transparent rounded corners.
 - **0.2.0** — **Breaking:** sourcetypes renamed to Splunk's vendor:product convention: `ubiquiti:unifi` (entry and UniFi OS / gateway), `ubiquiti:unifi:cef`, `ubiquiti:unifi:ap`, `ubiquiti:unifi:switch`. See Upgrading from 0.1.x.
