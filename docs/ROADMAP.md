@@ -26,6 +26,9 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 - [ ] Multi-firmware test matrix (UniFi Network 8.x–10.x, UniFi OS 3–5).
 - [ ] Document collection options: SC4S (recommended, enterprise/Cloud), rsyslog/syslog-ng -> file -> UF, direct UDP/TCP (single-instance labs).
 
+### Compatibility
+- [x] Supported Splunk versions: Enterprise 9.4–10.6, tested with [`unifi_security/scripts/compat_test.py`](https://github.com/RossLopez/unifi_security/blob/main/scripts/compat_test.py) (9.4.16, 10.0.11, 10.2.8, 10.4.2, 10.6.1).
+
 ### CIM accuracy
 - [ ] Validate with pytest-splunk-addon / CIM Validator; declare supported CIM version.
 - [ ] Network_Sessions `action` (`added`/`removed`) is not a CIM value.
@@ -43,6 +46,7 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 - [x] Screenshots (`assets/screenshots/`, taken on `unifi_security/scripts/demo_data.py` data); trademark disclaimer; no Ubiquiti logos.
 
 ## Release history
+- 0.2.2 — Documented supported Splunk versions: Enterprise 9.4–10.6, tested on each in Docker.
 - 0.2.1 — Splunk Web icons and logos fill the whole square; Splunk 10 showed its blue icon background through the transparent rounded corners.
 - 0.2.0 — Breaking: sourcetypes renamed `unifi:*` → `ubiquiti:unifi*`; README documents `rename` stanzas for data indexed by 0.1.x.
 - 0.1.5 — Author set to Ross Lopez; added support details and a GitHub bug report template.

@@ -1,6 +1,11 @@
-# UniFi Security Add-on (TA-unifi_security) v0.2.1
+# UniFi Security Add-on (TA-unifi_security) v0.2.2
 
 Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and CIM mapping for UDM Pro / UniFi OS syslog, UniFi APs and switches, and the UniFi SIEM integration (CEF).
+
+## Compatibility
+
+- Splunk Enterprise 9.4, 10.0, 10.2, 10.4 and 10.6 (tested on 9.4.16, 10.0.11, 10.2.8, 10.4.2 and 10.6.1).
+- Splunk Cloud Platform: passes AppInspect's Splunk Cloud checks; not yet tested on a Cloud stack.
 
 ## Install (single instance)
 
@@ -86,6 +91,7 @@ Not supported by Splunk or Ubiquiti.
 
 ## Release notes
 
+- **0.2.2** — Documented supported Splunk versions: Enterprise 9.4–10.6, tested on each in Docker.
 - **0.2.1** — Splunk Web icons and logos fill the whole square; Splunk 10 showed its blue icon background through the transparent rounded corners.
 - **0.2.0** — **Breaking:** sourcetypes renamed to Splunk's vendor:product convention: `ubiquiti:unifi` (entry and UniFi OS / gateway), `ubiquiti:unifi:cef`, `ubiquiti:unifi:ap`, `ubiquiti:unifi:switch`. See Upgrading from 0.1.x.
 - **0.1.5** — Author set to Ross Lopez; added support details.
