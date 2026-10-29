@@ -1,4 +1,4 @@
-# UniFi Security Add-on (TA-unifi_security) v0.2.3
+# UniFi Security Add-on (TA-unifi_security) v0.2.4
 
 Companion add-on for the **UniFi Security** app (`unifi_security`). Parsing and CIM mapping for UDM Pro / UniFi OS syslog, UniFi APs and switches, and the UniFi SIEM integration (CEF).
 
@@ -55,7 +55,7 @@ Splunk Cloud Platform: receive UniFi syslog on a heavy forwarder with the input 
 
 Menu names below are from UniFi Network 10.x on UniFi OS 5.x and move between releases.
 
-1. **SIEM events (CEF):** in UniFi Network, open **Settings > Control Plane > Integrations**. Next to **Activity Logging (Syslog)** choose **SIEM Server**, enter the Splunk (or heavy forwarder) IP and the input port, select the event categories you want (at least security detections, admin activity, client and device events) and apply. This produces `ubiquiti:unifi:cef` events: IPS/IDS threats, firewall blocks, WiFi impersonation (rogue AP), client connect/disconnect, admin access, and UniFi OS and UniFi Protect events from the same console. The SIEM option needs UniFi Network 8.5 or later.
+1. **SIEM events (CEF):** in UniFi Network, open **Integrations** in the left sidebar (older releases: **Settings > Control Plane > Integrations**). Next to **Activity Logging (Syslog)** choose **SIEM Server**, enter the Splunk (or heavy forwarder) IP and the input port, select the event categories you want (at least security detections, admin activity, client and device events) and apply. This produces `ubiquiti:unifi:cef` events: IPS/IDS threats, firewall blocks, WiFi impersonation (rogue AP), client connect/disconnect, admin access, and UniFi OS and UniFi Protect events from the same console. The SIEM option needs UniFi Network 8.5 or later.
 2. **Firewall traffic:** open **Settings > CyberSecure > Traffic Logging** and send **Activity Logging (Syslog)** to the same server and port. To log a specific policy, turn on **Syslog Logging** for it under **Settings > Policy Engine**. These arrive as iptables rule logs (`[PREROUTING-DNAT-3] … SRC= DST=`) in `ubiquiti:unifi`.
 3. **Gateway, AP and switch syslog** (DHCP, sudo, SSH, hostapd, `stahtd` WiFi auth results, switch link events): with remote logging on, UniFi Network configures adopted devices to send their own syslog directly to the same server. If AP or switch events don't appear, look for a debug or device-log option in the same Activity Logging panel (the name varies by version).
 
@@ -128,7 +128,7 @@ Index-time transforms set `host` to the originating device (gateway hostname, AP
 | Events arrive but fields, eventtypes and tags are missing | Install the add-on on the search heads as well. |
 | Input settings (index, sourcetype) ignored | Another app defines the same input stanza and wins the merge; remove the duplicate. `$SPLUNK_HOME/bin/splunk btool inputs list udp://5555 --debug` shows which file each setting comes from. |
 | Timestamps hours off | UniFi devices log local time without a zone. Set `TZ` in `local/props.conf` under `[ubiquiti:unifi]`, or per device with `[host::<device>]` (some switches, e.g. USW-Flex, log in UTC). |
-| No `ubiquiti:unifi:cef` events | SIEM Server is not selected under Control Plane > Integrations, or no event categories are selected. |
+| No `ubiquiti:unifi:cef` events | SIEM Server is not selected under Integrations (left sidebar), or no event categories are selected. |
 | Old searches broke after upgrading from 0.1.x | Sourcetypes were renamed in 0.2.0; see Upgrading from 0.1.x. |
 
 ## Support
@@ -139,6 +139,7 @@ Not supported by Splunk or Ubiquiti.
 
 ## Release notes
 
+- **0.2.4** — README: the SIEM integration is under Integrations in UniFi Network's left sidebar.
 - **0.2.3** — README: supported devices, where to install, sending logs from UniFi (SIEM, firewall traffic, device syslog) and troubleshooting.
 - **0.2.2** — Documented supported Splunk versions: Enterprise 9.4–10.6, tested on each in Docker.
 - **0.2.1** — Splunk Web icons and logos fill the whole square; Splunk 10 showed its blue icon background through the transparent rounded corners.
