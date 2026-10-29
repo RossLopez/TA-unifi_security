@@ -40,7 +40,7 @@ Companion app backlog: [unifi_security/docs/ROADMAP.md](https://github.com/RossL
 ### Listing / docs
 - [ ] README: supported devices/firmware, enabling UniFi SIEM integration, install-location table, sourcetype + CIM tables, troubleshooting (input stanza merge precedence).
 - [ ] Sanitized samples + eventgen + pytest-splunk-addon configs.
-- [ ] Screenshots; trademark disclaimer; no Ubiquiti logos.
+- [x] Screenshots (`assets/screenshots/`, taken on `unifi_security/scripts/demo_data.py` data); trademark disclaimer; no Ubiquiti logos.
 
 ## Release history
 - 0.2.1 — Splunk Web icons and logos fill the whole square; Splunk 10 showed its blue icon background through the transparent rounded corners.
